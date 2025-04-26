@@ -6,6 +6,8 @@ import MapView, { Marker } from 'react-native-maps';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const MapComponent = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -86,13 +88,47 @@ const MapComponent = () => {
   );
 };
 
+interface Trip {
+  date: string;
+  description: string;
+  carbonEmission: number;
+  distance: number;
+}
+
 const CarbonEmissionCard = () => {
+  const [todayEmission, setTodayEmission] = useState<number>(0);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadTodayEmission();
+    }, [])
+  );
+
+  const loadTodayEmission = async () => {
+    try {
+      const trips = await AsyncStorage.getItem('recentTrips');
+      if (trips !== null) {
+        const allTrips: Trip[] = JSON.parse(trips);
+        const today = new Date().toISOString().split('T')[0];
+        
+        const todayTrips = allTrips.filter(trip => trip.date === today);
+        const totalEmission = todayTrips.reduce((sum, trip) => sum + trip.carbonEmission, 0);
+        
+        setTodayEmission(totalEmission);
+      }
+    } catch (error) {
+      console.error('Error loading today emission:', error);
+    }
+  };
+
   return (
     <View style={styles.carbonContainer}>
       <BlurView intensity={50} style={StyleSheet.absoluteFill} />
       <View style={styles.carbonContent}>
         <Text style={styles.carbonTitle}>今日碳排放量</Text>
-        <Text style={styles.carbonNumber}>2.5<Text style={styles.carbonUnit}>kg</Text></Text>
+        <Text style={styles.carbonNumber}>
+          {todayEmission.toFixed(1)}<Text style={styles.carbonUnit}>kg</Text>
+        </Text>
         <TouchableOpacity 
           style={styles.detailButton}
           onPress={() => router.push('/detail')}>
