@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 const MapComponent = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -92,7 +93,9 @@ const CarbonEmissionCard = () => {
       <View style={styles.carbonContent}>
         <Text style={styles.carbonTitle}>今日碳排放量</Text>
         <Text style={styles.carbonNumber}>2.5<Text style={styles.carbonUnit}>kg</Text></Text>
-        <TouchableOpacity style={styles.detailButton}>
+        <TouchableOpacity 
+          style={styles.detailButton}
+          onPress={() => router.push('/detail')}>
           <Text style={styles.detailButtonText}>查看详情</Text>
         </TouchableOpacity>
       </View>
