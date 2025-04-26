@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ImageBackground, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import { View, ImageBackground, StyleSheet, Text, TouchableOpacity, Image, Animated } from "react-native";
 import { useState, useEffect } from "react";
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
@@ -8,6 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { calculateUserRank, updateCurrentUserEmission, loadAndUpdateRankData } from '@/app/utils/rankUtils';
 
 const MapComponent = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -100,34 +101,31 @@ const CarbonEmissionCard = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      loadTodayEmission();
+      const updateEmission = async () => {
+        try {
+          // 更新所有数据
+          await loadAndUpdateRankData();
+          // 获取更新后的碳排放强度
+          const emissionStr = await AsyncStorage.getItem('todayEmissionPerKm');
+          if (emissionStr !== null) {
+            setTodayEmission(parseFloat(emissionStr));
+          }
+        } catch (error) {
+          console.error('Error updating emission:', error);
+        }
+      };
+
+      updateEmission();
     }, [])
   );
-
-  const loadTodayEmission = async () => {
-    try {
-      const trips = await AsyncStorage.getItem('recentTrips');
-      if (trips !== null) {
-        const allTrips: Trip[] = JSON.parse(trips);
-        const today = new Date().toISOString().split('T')[0];
-        
-        const todayTrips = allTrips.filter(trip => trip.date === today);
-        const totalEmission = todayTrips.reduce((sum, trip) => sum + trip.carbonEmission, 0);
-        
-        setTodayEmission(totalEmission);
-      }
-    } catch (error) {
-      console.error('Error loading today emission:', error);
-    }
-  };
 
   return (
     <View style={styles.carbonContainer}>
       <BlurView intensity={50} style={StyleSheet.absoluteFill} />
       <View style={styles.carbonContent}>
-        <Text style={styles.carbonTitle}>今日碳排放量</Text>
+        <Text style={styles.carbonTitle}>今日碳排放强度</Text>
         <Text style={styles.carbonNumber}>
-          {todayEmission.toFixed(1)}<Text style={styles.carbonUnit}>kg</Text>
+          {todayEmission.toFixed(2)}<Text style={styles.carbonUnit}>kg/km</Text>
         </Text>
         <TouchableOpacity 
           style={styles.detailButton}
@@ -140,6 +138,60 @@ const CarbonEmissionCard = () => {
 };
 
 const UserStatusCard = () => {
+  const [scaleAnim] = useState(new Animated.Value(1));
+  const [userRank, setUserRank] = useState<number>(0);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const updateRankData = async () => {
+        try {
+          // 首先更新排名数据
+          await loadAndUpdateRankData();
+          
+          // 然后获取更新后的排名
+          const savedUsers = await AsyncStorage.getItem('rankUsers');
+          if (!savedUsers) {
+            setUserRank(0);
+            return;
+          }
+
+          const users = JSON.parse(savedUsers);
+          if (!Array.isArray(users) || users.length === 0) {
+            setUserRank(0);
+            return;
+          }
+
+          const sortedUsers = users.sort((a: any, b: any) => a.carbonEmission - b.carbonEmission);
+          const rank = sortedUsers.findIndex((user: any) => user.username === 'lucas77778') + 1;
+          setUserRank(rank > 0 ? rank : 0);
+        } catch (error) {
+          console.error('加载排名时出错:', error);
+          setUserRank(0);
+        }
+      };
+
+      updateRankData();
+    }, [])
+  );
+
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1.2,
+      useNativeDriver: true,
+      friction: 7,
+      tension: 40
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      friction: 7,
+      tension: 40
+    }).start();
+  };
+
   return (
     <View style={styles.userStatusContainer}>
       <BlurView intensity={50} style={StyleSheet.absoluteFill} />
@@ -157,10 +209,23 @@ const UserStatusCard = () => {
         <View style={styles.statusSection}>
           <View style={styles.rankingContainer}>
             <Text style={styles.rankingLabel}>我的排名</Text>
-            <View style={styles.rankingNumberContainer}>
-              <Text style={styles.rankingNumber}>128</Text>
+            <TouchableOpacity 
+              style={styles.rankingNumberContainer}
+              onPress={() => router.push('/rank')}
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
+              activeOpacity={1}
+            >
+              <Animated.Text 
+                style={[
+                  styles.rankingNumber,
+                  { transform: [{ scale: scaleAnim }] }
+                ]}
+              >
+                {userRank || '-'}
+              </Animated.Text>
               <MaterialCommunityIcons name="crown" size={24} color="#FFD700" style={styles.crownIcon} />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.titleLabel}>我的称号</Text>
@@ -438,5 +503,9 @@ const styles = StyleSheet.create({
   },
   leafIcon: {
     marginLeft: 2,
+  },
+  rankingClickable: {
+    textDecorationLine: 'underline',
+    textDecorationColor: '#FFFFFF',
   },
 });

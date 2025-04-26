@@ -114,8 +114,10 @@ export default function DetailScreen() {
     try {
       const existingTrips = await AsyncStorage.getItem('recentTrips');
       const trips = existingTrips ? JSON.parse(existingTrips) : [];
+      
       const updatedTrips = [newTrip, ...trips];
       await AsyncStorage.setItem('recentTrips', JSON.stringify(updatedTrips));
+      
       await loadRecentTrips();
       setShowForm(false);
       setNewTrip({
@@ -248,6 +250,17 @@ export default function DetailScreen() {
     );
   };
 
+  const renderItem = ({ item }: { item: Trip }) => (
+    <View style={styles.tripCard}>
+      <Text style={styles.tripDate}>{item.date}</Text>
+      <Text style={styles.tripDetails}>{item.description}</Text>
+      <View style={styles.tripStats}>
+        <Text style={styles.tripStatsText}>碳排放强度: {(item.carbonEmission / item.distance).toFixed(2)} kg/km</Text>
+        <Text style={styles.tripStatsText}>距离: {item.distance}km</Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={{ flex: 1 }}>
       {showCamera ? (
@@ -318,7 +331,7 @@ export default function DetailScreen() {
                       <Text style={styles.tripDate}>{trip.date}</Text>
                       <Text style={styles.tripDetails}>{trip.description}</Text>
                       <View style={styles.tripStats}>
-                        <Text style={styles.tripStatsText}>碳排放量: {trip.carbonEmission}kg</Text>
+                        <Text style={styles.tripStatsText}>碳排放强度: {(trip.carbonEmission / trip.distance).toFixed(2)} kg/km</Text>
                         <Text style={styles.tripStatsText}>距离: {trip.distance}km</Text>
                       </View>
                     </View>
