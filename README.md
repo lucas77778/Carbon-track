@@ -1,50 +1,85 @@
-# Welcome to your Expo app 👋
+# Carbon Track - Your Green Travel Companion 🌍
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Project Background
 
-## Get started
+In an era of increasing global climate change, reducing carbon emissions has become one of humanity's greatest challenges. The transportation sector accounts for approximately 24% of global carbon emissions, with private vehicles contributing a significant portion. Carbon Track aims to help users through technological means to:
 
-1. Install dependencies
+- Track real-time carbon emissions from personal travel
+- Develop green travel habits
+- Motivate users to choose low-carbon transportation through social rankings
+- Provide detailed carbon emission data analysis and visualization
 
-   ```bash
-   npm install
-   ```
+## Technology Stack
 
-2. Start the app
+This project utilizes a modern mobile application development stack:
 
-   ```bash
-    npx expo start
-   ```
+- **Framework**: [Expo](https://expo.dev) + React Native
+- **Routing**: Expo Router (file-based routing)
+- **Map Services**: React Native Maps + Expo Location
+- **UI Components**:
+  - Expo BlurView (glass effect)
+  - React Native Animated (animation effects)
+  - React Native Vector Icons
+- **Data Storage**: AsyncStorage
+- **State Management**: React Hooks
+- **Development Tools**: TypeScript
 
-In the output, you'll find options to open the app in a
+## Key Features
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- 📍 Real-time Location Tracking
+- 📊 Carbon Emission Data Visualization
+- 🏆 User Ranking System
+- 🗺️ Interactive Map Display
+- 📱 Beautiful User Interface
+- 📈 Detailed Travel Statistics
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Quick Start
 
-## Get a fresh project
-
-When you're ready, run:
+1. Install Dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Launch the Application
 
-## Learn more
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Development Requirements
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Node.js 14.0 or higher
+- Expo CLI
+- iOS Simulator or Android Emulator (optional)
+- Expo Go app (for physical device testing)
 
-## Join the community
+## Contributing Guidelines
 
-Join our community of developers creating universal apps.
+We welcome all forms of contributions, including but not limited to:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Bug Reports
+- Feature Suggestions
+- Code Contributions
+- Documentation Improvements
+
+## Future Plans
+
+- [ ] Add carbon emission calculations for more transportation modes
+- [ ] Integrate public transportation information
+- [ ] Add carbon emission alert features
+- [ ] Support multiple languages
+- [ ] Add more social features
+
+## License
+
+MIT License
+
+## Contact Us
+
+If you have any questions or suggestions, please feel free to reach out through:
+
+- Submit an Issue
+- Send an email to: [gwen777778@gmail.com]
+
+Let's work together to reduce carbon emissions and protect our planet! 🌱
