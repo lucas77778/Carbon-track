@@ -13,13 +13,13 @@ import { calculateUserRank, updateCurrentUserEmission, loadAndUpdateRankData } f
 const MapComponent = () => {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [address, setAddress] = useState<string>('正在获取地址...');
+  const [address, setAddress] = useState<string>('getting address...');
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('未获得位置权限');
+        setErrorMsg('no location permission');
         return;
       }
 
@@ -36,10 +36,10 @@ const MapComponent = () => {
         if (reverseGeocode.length > 0) {
           const { region, city, district } = reverseGeocode[0];
           const addressText = `${region || ''} ${city || ''} ${district || ''}`.trim();
-          setAddress(addressText || '未能获取具体地址');
+          setAddress(addressText || 'failed to get specific address');
         }
       } catch (error) {
-        setAddress('地址获取失败');
+        setAddress('address get failed');
       }
     })();
   }, []);
@@ -50,7 +50,7 @@ const MapComponent = () => {
         <Text style={styles.titleText}>DELIVERY ADDRESS</Text>
         <View style={styles.mapContainer}>
           <BlurView intensity={50} style={StyleSheet.absoluteFill} />
-          <Text style={styles.loadingText}>正在获取位置...</Text>
+          <Text style={styles.loadingText}>getting location...</Text>
         </View>
       </>
     );
@@ -77,7 +77,7 @@ const MapComponent = () => {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
               }}
-              title="当前位置"
+              title="current location"
             />
           </MapView>
           <View style={styles.addressContainer}>
@@ -123,14 +123,14 @@ const CarbonEmissionCard = () => {
     <View style={styles.carbonContainer}>
       <BlurView intensity={50} style={StyleSheet.absoluteFill} />
       <View style={styles.carbonContent}>
-        <Text style={styles.carbonTitle}>今日碳排放强度</Text>
+        <Text style={styles.carbonTitle}>today carbon intensity</Text>
         <Text style={styles.carbonNumber}>
           {todayEmission.toFixed(2)}<Text style={styles.carbonUnit}>kg/km</Text>
         </Text>
         <TouchableOpacity 
           style={styles.detailButton}
           onPress={() => router.push('/detail')}>
-          <Text style={styles.detailButtonText}>查看详情</Text>
+          <Text style={styles.detailButtonText}>view details</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -165,7 +165,7 @@ const UserStatusCard = () => {
           const rank = sortedUsers.findIndex((user: any) => user.username === 'lucas77778') + 1;
           setUserRank(rank > 0 ? rank : 0);
         } catch (error) {
-          console.error('加载排名时出错:', error);
+          console.error('error loading rank:', error);
           setUserRank(0);
         }
       };
@@ -208,7 +208,7 @@ const UserStatusCard = () => {
         </View>
         <View style={styles.statusSection}>
           <View style={styles.rankingContainer}>
-            <Text style={styles.rankingLabel}>我的排名</Text>
+            <Text style={styles.rankingLabel}>my rank</Text>
             <TouchableOpacity 
               style={styles.rankingNumberContainer}
               onPress={() => router.push('/rank')}
@@ -224,13 +224,15 @@ const UserStatusCard = () => {
               >
                 {userRank || '-'}
               </Animated.Text>
-              <MaterialCommunityIcons name="crown" size={24} color="#FFD700" style={styles.crownIcon} />
+              {userRank > 0 && userRank <= 3 && (
+                <MaterialCommunityIcons name="crown" size={24} color="#FFD700" style={styles.crownIcon} />
+              )}
             </TouchableOpacity>
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLabel}>我的称号</Text>
+            <Text style={styles.titleLabel}>my title</Text>
             <View style={styles.titleBadge}>
-              <Text style={styles.statusTitleText}>环保使者</Text>
+              <Text style={styles.statusTitleText}>greenhand</Text>
               <MaterialCommunityIcons name="leaf" size={20} color="#4CAF50" style={styles.leafIcon} />
             </View>
           </View>

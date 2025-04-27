@@ -54,25 +54,25 @@ export default function DetailScreen() {
     const sampleTrips: Trip[] = [
       {
         date: '2024-03-20',
-        description: '地铁通勤',
+        description: 'metro',
         carbonEmission: 0.5,
         distance: 8.5
       },
       {
         date: '2024-03-19',
-        description: '共享单车',
+        description: 'bike',
         carbonEmission: 0,
         distance: 3.2
       },
       {
         date: '2024-03-18',
-        description: '开车购物',
+        description: 'drive',
         carbonEmission: 2.8,
         distance: 12.5
       },
       {
         date: '2024-03-17',
-        description: '公交车旅行',
+        description: 'bus',
         carbonEmission: 1.2,
         distance: 15.0
       }
@@ -155,7 +155,7 @@ export default function DetailScreen() {
         setVehicles(JSON.parse(savedVehicles));
       }
     } catch (error) {
-      console.error('加载车辆数据失败:', error);
+      console.error('load vehicle data failed:', error);
     }
   };
 
@@ -173,7 +173,7 @@ export default function DetailScreen() {
         imageUrl: ''
       });
     } catch (error) {
-      console.error('添加车辆失败:', error);
+      console.error('add vehicle failed:', error);
     }
   };
 
@@ -185,7 +185,7 @@ export default function DetailScreen() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
     if (status !== 'granted') {
-      alert('需要相册访问权限来选择照片');
+      alert('need album access permission to choose photo');
       return;
     }
 
@@ -206,7 +206,7 @@ export default function DetailScreen() {
     if (!permission?.granted) {
       const status = await requestPermission();
       if (!status.granted) {
-        Alert.alert('权限提示', '需要相机权限来拍照');
+        Alert.alert('permission prompt', 'need camera permission to take photo');
         return;
       }
     }
@@ -223,26 +223,26 @@ export default function DetailScreen() {
           setShowCamera(false);
         }
       } catch (error) {
-        console.log('拍照出错:', error);
+        console.log('take photo error:', error);
       }
     }
   };
 
   const handleImagePicker = () => {
     Alert.alert(
-      '选择图片',
-      '请选择图片来源',
+      'choose image',
+      'please choose image source',
       [
         {
-          text: '取消',
+          text: 'cancel',
           style: 'cancel'
         },
         {
-          text: '拍摄照片',
+          text: 'take photo',
           onPress: openCamera
         },
         {
-          text: '从相册选择',
+          text: 'choose from album',
           onPress: pickImage
         }
       ],
@@ -255,8 +255,8 @@ export default function DetailScreen() {
       <Text style={styles.tripDate}>{item.date}</Text>
       <Text style={styles.tripDetails}>{item.description}</Text>
       <View style={styles.tripStats}>
-        <Text style={styles.tripStatsText}>碳排放强度: {(item.carbonEmission / item.distance).toFixed(2)} kg/km</Text>
-        <Text style={styles.tripStatsText}>距离: {item.distance}km</Text>
+        <Text style={styles.tripStatsText}>carbon intensity: {(item.carbonEmission / item.distance).toFixed(2)} kg/km</Text>
+        <Text style={styles.tripStatsText}>distance: {item.distance}km</Text>
       </View>
     </View>
   );
@@ -276,7 +276,7 @@ export default function DetailScreen() {
                   style={styles.cameraButton}
                   onPress={() => setShowCamera(false)}
                 >
-                  <Text style={styles.cameraButtonText}>取消</Text>
+                  <Text style={styles.cameraButtonText}>cancel</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
@@ -306,12 +306,12 @@ export default function DetailScreen() {
               <TouchableOpacity 
                 style={styles.tabButton}
                 onPress={() => switchTab('history')}>
-                <Text style={[styles.tabText, activeTab === 'history' && styles.activeTabText]}>出行历史</Text>
+                <Text style={[styles.tabText, activeTab === 'history' && styles.activeTabText]}>my history</Text>
               </TouchableOpacity>
               <TouchableOpacity 
                 style={styles.tabButton}
                 onPress={() => switchTab('transport')}>
-                <Text style={[styles.tabText, activeTab === 'transport' && styles.activeTabText]}>我的交通</Text>
+                <Text style={[styles.tabText, activeTab === 'transport' && styles.activeTabText]}>my transport</Text>
               </TouchableOpacity>
             </View>
 
@@ -331,8 +331,8 @@ export default function DetailScreen() {
                       <Text style={styles.tripDate}>{trip.date}</Text>
                       <Text style={styles.tripDetails}>{trip.description}</Text>
                       <View style={styles.tripStats}>
-                        <Text style={styles.tripStatsText}>碳排放强度: {(trip.carbonEmission / trip.distance).toFixed(2)} kg/km</Text>
-                        <Text style={styles.tripStatsText}>距离: {trip.distance}km</Text>
+                        <Text style={styles.tripStatsText}>carbon intensity: {(trip.carbonEmission / trip.distance).toFixed(2)} kg/km</Text>
+                        <Text style={styles.tripStatsText}>distance: {trip.distance}km</Text>
                       </View>
                     </View>
                   ))}
@@ -351,14 +351,14 @@ export default function DetailScreen() {
                       <View style={[styles.iconContainer, { backgroundColor: '#4CAF50' }]}>
                         <MaterialCommunityIcons name="car-electric" size={32} color="white" />
                       </View>
-                      <Text style={styles.transportTitle}>新能源汽车</Text>
+                      <Text style={styles.transportTitle}>new energy vehicle</Text>
                       <View style={styles.transportDetails}>
                         <View style={styles.detailRow}>
-                          <Text style={styles.detailLabel}>品牌型号</Text>
-                          <Text style={styles.detailValue}>极氪001</Text>
+                          <Text style={styles.detailLabel}>brand model</Text>
+                          <Text style={styles.detailValue}>ZEEKR 001</Text>
                         </View>
                         <View style={styles.detailRow}>
-                          <Text style={styles.detailLabel}>碳排放量</Text>
+                          <Text style={styles.detailLabel}>carbon emission</Text>
                           <Text style={styles.detailValue}>30g/km</Text>
                         </View>
                       </View>
@@ -381,11 +381,11 @@ export default function DetailScreen() {
                         <Text style={styles.transportTitle}>{vehicle.type}</Text>
                         <View style={styles.transportDetails}>
                           <View style={styles.detailRow}>
-                            <Text style={styles.detailLabel}>品牌型号</Text>
+                            <Text style={styles.detailLabel}>brand model</Text>
                             <Text style={styles.detailValue}>{vehicle.brand} {vehicle.model}</Text>
                           </View>
                           <View style={styles.detailRow}>
-                            <Text style={styles.detailLabel}>碳排放量</Text>
+                            <Text style={styles.detailLabel}>carbon emission</Text>
                             <Text style={styles.detailValue}>{vehicle.carbonEmission}g/km</Text>
                           </View>
                         </View>
@@ -399,7 +399,7 @@ export default function DetailScreen() {
                   >
                     <View style={styles.emptyCardContent}>
                       <Ionicons name="add-circle-outline" size={40} color="#666" />
-                      <Text style={styles.emptyCardText}>添加新的交通工具</Text>
+                      <Text style={styles.emptyCardText}>add new transport</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -420,7 +420,7 @@ export default function DetailScreen() {
             >
               <View style={styles.modalContent}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>添加出行记录</Text>
+                  <Text style={styles.modalTitle}>add trip record</Text>
                   <TouchableOpacity onPress={() => setShowForm(false)}>
                     <Ionicons name="close" size={24} color="#333" />
                   </TouchableOpacity>
@@ -428,14 +428,14 @@ export default function DetailScreen() {
                 
                 <TextInput
                   style={styles.input}
-                  placeholder="出行描述"
+                  placeholder="trip description"
                   placeholderTextColor="#666"
                   value={newTrip.description}
                   onChangeText={(text) => setNewTrip({...newTrip, description: text})}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="距离（公里）"
+                  placeholder="distance (km)"
                   placeholderTextColor="#666"
                   keyboardType="numeric"
                   value={newTrip.distance.toString()}
@@ -443,7 +443,7 @@ export default function DetailScreen() {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="碳排放量（千克）"
+                  placeholder="carbon emission (kg)"
                   placeholderTextColor="#666"
                   keyboardType="numeric"
                   value={newTrip.carbonEmission.toString()}
@@ -453,12 +453,12 @@ export default function DetailScreen() {
                   <TouchableOpacity 
                     style={[styles.formButton, styles.cancelButton]}
                     onPress={() => setShowForm(false)}>
-                    <Text style={styles.buttonText}>取消</Text>
+                    <Text style={styles.buttonText}>cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     style={[styles.formButton, styles.submitButton]}
                     onPress={handleAddTrip}>
-                    <Text style={styles.buttonText}>提交</Text>
+                    <Text style={styles.buttonText}>submit</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -474,7 +474,7 @@ export default function DetailScreen() {
             <View style={styles.modalOverlay}>
               <View style={styles.modalContent}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>添加出行工具</Text>
+                  <Text style={styles.modalTitle}>add transport tool</Text>
                   <TouchableOpacity onPress={() => setShowVehicleForm(false)}>
                     <Ionicons name="close" size={24} color="#333" />
                   </TouchableOpacity>
@@ -482,28 +482,28 @@ export default function DetailScreen() {
                 
                 <TextInput
                   style={styles.input}
-                  placeholder="交通工具类型"
+                  placeholder="transport type"
                   placeholderTextColor="#666"
                   value={newVehicle.type}
                   onChangeText={(text) => setNewVehicle({...newVehicle, type: text})}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="品牌"
+                  placeholder="brand"
                   placeholderTextColor="#666"
                   value={newVehicle.brand}
                   onChangeText={(text) => setNewVehicle({...newVehicle, brand: text})}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="型号"
+                  placeholder="model"
                   placeholderTextColor="#666"
                   value={newVehicle.model}
                   onChangeText={(text) => setNewVehicle({...newVehicle, model: text})}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="碳排放量 (g/km)"
+                  placeholder="carbon emission (g/km)"
                   placeholderTextColor="#666"
                   keyboardType="numeric"
                   value={newVehicle.carbonEmission.toString()}
@@ -516,7 +516,7 @@ export default function DetailScreen() {
                 >
                   <MaterialIcons name="photo-camera" size={24} color="white" />
                   <Text style={styles.imagePickerText}>
-                    {newVehicle.imageUrl ? '更换车辆图片' : '添加车辆图片'}
+                    {newVehicle.imageUrl ? 'change vehicle image' : 'add vehicle image'}
                   </Text>
                 </TouchableOpacity>
 
@@ -533,12 +533,12 @@ export default function DetailScreen() {
                   <TouchableOpacity 
                     style={[styles.formButton, styles.cancelButton]}
                     onPress={() => setShowVehicleForm(false)}>
-                    <Text style={styles.buttonText}>取消</Text>
+                    <Text style={styles.buttonText}>cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     style={[styles.formButton, styles.submitButton]}
                     onPress={handleAddVehicle}>
-                    <Text style={styles.buttonText}>添加</Text>
+                    <Text style={styles.buttonText}>submit</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -562,7 +562,7 @@ export default function DetailScreen() {
                   onPress={pickImage}
                 >
                   <MaterialIcons name="photo-library" size={24} color="#333" />
-                  <Text style={styles.pickerOptionText}>从相册选择</Text>
+                  <Text style={styles.pickerOptionText}>choose from album</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
@@ -570,14 +570,14 @@ export default function DetailScreen() {
                   onPress={openCamera}
                 >
                   <MaterialIcons name="camera-alt" size={24} color="#333" />
-                  <Text style={styles.pickerOptionText}>拍摄照片</Text>
+                  <Text style={styles.pickerOptionText}>take photo</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                   style={[styles.pickerOption, styles.cancelOption]}
                   onPress={() => setShowImagePicker(false)}
                 >
-                  <Text style={[styles.pickerOptionText, styles.cancelText]}>取消</Text>
+                  <Text style={[styles.pickerOptionText, styles.cancelText]}>cancel</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>

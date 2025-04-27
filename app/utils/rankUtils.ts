@@ -34,21 +34,22 @@ export const loadAndUpdateRankData = async (): Promise<UserData[]> => {
 
     // 基础用户数据
     let baseUsers: UserData[] = [
-      { id: '1', username: '张三', carbonEmission: 2.1 },
-      { id: '2', username: '李四', carbonEmission: 2.3 },
-      { id: '3', username: '王五', carbonEmission: 2.5 },
-      { id: '4', username: '赵六', carbonEmission: 2.7 },
-      { id: '5', username: '孙七', carbonEmission: 2.9 },
-      { id: '6', username: '周八', carbonEmission: 3.1 },
-      { id: '7', username: '吴九', carbonEmission: 3.3 },
-      { id: '8', username: '郑十', carbonEmission: 3.5 }
+      { id: '1', username: 'Emma', carbonEmission: 2.1, avatar: require('@/assets/images/avatars/avatar1.jpg') },
+      { id: '2', username: 'James', carbonEmission: 2.3, avatar: require('@/assets/images/avatars/avatar2.jpg') },
+      { id: '3', username: 'Oliver', carbonEmission: 2.5, avatar: require('@/assets/images/avatars/avatar3.jpg') },
+      { id: '4', username: 'Sophia', carbonEmission: 2.7, avatar: require('@/assets/images/avatars/avatar4.jpg') },
+      { id: '5', username: 'William', carbonEmission: 2.9, avatar: require('@/assets/images/avatars/avatar5.jpg') },
+      { id: '6', username: 'Isabella', carbonEmission: 3.1, avatar: require('@/assets/images/avatars/avatar6.jpg') },
+      { id: '7', username: 'Henry', carbonEmission: 3.3, avatar: require('@/assets/images/avatars/avatar7.jpg') },
+      { id: '8', username: 'Charlotte', carbonEmission: 3.5, avatar: require('@/assets/images/avatars/avatar8.jpg') }
     ];
 
     baseUsers = baseUsers.filter(user => user.username !== 'lucas77778');
     baseUsers.push({
       id: 'lucas77778',
       username: 'lucas77778',
-      carbonEmission: todayEmission
+      carbonEmission: todayEmission,
+      avatar: require('@/assets/images/avatar.jpeg')
     });
 
     await AsyncStorage.setItem('rankUsers', JSON.stringify(baseUsers));

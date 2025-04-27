@@ -80,6 +80,11 @@ export default function RankList() {
       outputRange: [1, 1, 1, 0]
     });
 
+    // 添加头像加载错误处理
+    const handleImageError = () => {
+      console.error(`avatar load failed: ${item.username}`);
+    };
+
     return (
       <Animated.View 
         style={[
@@ -109,8 +114,12 @@ export default function RankList() {
           </View>
           <View style={styles.avatarContainer}>
             <Image 
-              source={item.avatar ? { uri: item.avatar } : require('@/assets/images/avatar.jpeg')}
-              style={styles.avatar}
+              source={item.avatar ? item.avatar : require('@/assets/images/avatar.jpeg')}
+              style={[
+                styles.avatar,
+                item.username === 'lucas77778' && styles.currentUserAvatar
+              ]}
+              onError={handleImageError}
             />
             <View style={styles.onlineIndicator} />
           </View>
@@ -125,7 +134,7 @@ export default function RankList() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>碳排放强度排行榜</Text>
+      <Text style={styles.title}>carbon intensity ranking</Text>
       <Animated.FlatList
         data={getRankedUsers()}
         renderItem={renderItem}
@@ -207,6 +216,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 2,
     borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  currentUserAvatar: {
+    borderColor: '#4CAF50',
+    borderWidth: 2,
   },
   onlineIndicator: {
     position: 'absolute',
